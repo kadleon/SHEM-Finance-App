@@ -1,0 +1,26 @@
+# Laravel
+/backend/.env
+/backend/.env.local
+/backend/vendor/
+/backend/node_modules/
+/backend/storage/
+/backend/bootstrap/cache/
+
+# React
+/frontend/node_modules/
+/frontend/dist/
+/frontend/.env.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker
+.docker-compose.override.yml

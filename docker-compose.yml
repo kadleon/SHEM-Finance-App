@@ -1,0 +1,49 @@
+version: '3.9'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: shem-mysql
+    environment:
+      MYSQL_DATABASE: shem_finance
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_PASSWORD: password
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+
+  php:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: shem-backend
+    ports:
+      - "8000:8000"
+    environment:
+      DB_HOST: mysql
+      DB_DATABASE: shem_finance
+      DB_USERNAME: root
+      DB_PASSWORD: root
+    volumes:
+      - ./backend:/app
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  node:
+    image: node:18
+    container_name: shem-frontend
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+    working_dir: /app
+    command: npm run dev
+
+volumes:
+  mysql_data:
